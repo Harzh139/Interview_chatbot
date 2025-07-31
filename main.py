@@ -71,10 +71,22 @@ def get_bot_message():
             return f"Please select your country code and enter your {field_display.lower()}:"
         return f"Please provide your {field_display.lower()}:"
     elif st.session_state['step'] == len(FIELDS) + 1:
-        # Generate single technical question
-        tech_stack = st.session_state['candidate_data'].get('tech_stack', '')
-        prompt = f"Create one practical technical interview question for a candidate with tech stack: {tech_stack}. Make it scenario-based and relevant to their skills."
-        return ask_llm(prompt, SYSTEM_CONTEXT)
+        # Generate single technical question based on tech stack
+        tech_stack = st.session_state['candidate_data'].get('tech_stack', '').lower()
+        
+        # Generate a relevant question based on their tech stack
+        if 'python' in tech_stack and 'java' in tech_stack:
+            return "You're working on a project where you need to integrate a Python microservice with a Java application. How would you handle data exchange between these two services, and what challenges might you face?"
+        elif 'python' in tech_stack:
+            return "You're working on a Python web application that needs to handle 1000+ concurrent users. What strategies would you use to optimize performance and manage database connections?"
+        elif 'java' in tech_stack:
+            return "You're designing a Java application that processes large files. How would you implement error handling and ensure the application remains responsive during file processing?"
+        elif 'javascript' in tech_stack or 'js' in tech_stack:
+            return "You're building a real-time chat application using JavaScript. How would you handle message delivery, user authentication, and ensure messages are delivered even if users are offline?"
+        elif 'react' in tech_stack:
+            return "You're building a React application with complex state management. A component is re-rendering too frequently, causing performance issues. How would you identify and fix this problem?"
+        else:
+            return f"Based on your tech stack ({st.session_state['candidate_data'].get('tech_stack', '')}), describe a challenging project you've worked on and how you solved a specific technical problem you encountered."
     else:
         st.session_state['conversation_complete'] = True
         email = st.session_state['candidate_data'].get('email', '')
