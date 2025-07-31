@@ -73,11 +73,7 @@ def get_bot_message():
     elif st.session_state['step'] == len(FIELDS) + 1:
         # Generate single technical question
         tech_stack = st.session_state['candidate_data'].get('tech_stack', '')
-        prompt = f"""Based on the candidate's tech stack: {tech_stack}
-        
-Generate ONE practical scenario-based technical question that tests their understanding.
-Make it relevant to their tech stack and suitable for a hiring interview.
-Return only the question, no formatting or headers."""
+        prompt = f"Create one practical technical interview question for a candidate with tech stack: {tech_stack}. Make it scenario-based and relevant to their skills."
         return ask_llm(prompt, SYSTEM_CONTEXT)
     else:
         st.session_state['conversation_complete'] = True
